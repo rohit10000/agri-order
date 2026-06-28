@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: khet-freshness-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-khet_freshness}
+      POSTGRES_USER: ${POSTGRES_USER:-khetuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_secure_password}
+      TZ: Asia/Kolkata
+      PGTZ: Asia/Kolkata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-khetuser} -d ${POSTGRES_DB:-khet_freshness}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - khet-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  khet-network:
+    driver: bridge

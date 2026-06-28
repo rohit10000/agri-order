@@ -1,0 +1,17 @@
+package in.agri.order.config;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConfigurationProperties(prefix = "app.razorpay")
+@Getter
+@Setter
+public class RazorpayConfig {
+    private String keyId;
+    private String keySecret;
+    private String webhookSecret;
+    private String apiUrl;
+}
